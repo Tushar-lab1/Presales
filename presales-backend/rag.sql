@@ -44,11 +44,12 @@ CREATE TABLE IF NOT EXISTS chunks (
     chunk_index INT NOT NULL,          -- position within the document
     content     TEXT NOT NULL,
     page_number INT,                   -- NULL when not applicable
-    embedding   VECTOR(384),
+    embedding   VECTOR(768),           -- multi-qa-mpnet-base-dot-v1 (768-dim)
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- fast ANN index on the embedding column
+-- lists = 100 is a good default; tune to ~sqrt(expected row count)
 CREATE INDEX IF NOT EXISTS chunks_embedding_idx
     ON chunks USING ivfflat (embedding vector_cosine_ops)
     WITH (lists = 100);

@@ -143,7 +143,6 @@ function Hero({ user, workspace, blurred }) {
     setShowDocs(false);
     loadChatHistory();
     loadDocuments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspace?.id]);
 
   useEffect(() => {
@@ -214,9 +213,15 @@ function Hero({ user, workspace, blurred }) {
     }
   };
 
+  // const handleFileSelect = (e) => {
+  //   setFiles((prev) => [...prev, ...Array.from(e.target.files)]);
+  //   e.target.value = ""; // allow re-selecting same file
+  // };
   const handleFileSelect = (e) => {
-    setFiles((prev) => [...prev, ...Array.from(e.target.files)]);
-    e.target.value = ""; // allow re-selecting same file
+    const selected = Array.from(e.target.files || []);
+    if (selected.length === 0) return;
+
+    setFiles((prev) => [...prev, ...selected]);
   };
 
   const removeFile = (i) =>
